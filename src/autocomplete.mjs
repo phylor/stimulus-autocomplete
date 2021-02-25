@@ -73,7 +73,23 @@ export default class extends Controller {
     target.setAttribute("aria-selected", "true")
     target.classList.add("active")
     this.inputTarget.setAttribute("aria-activedescendant", target.id)
-    target.scrollIntoView(false)
+    this.scrollTo(this.resultsTarget, target)
+  }
+
+  scrollTo(results, element) {
+    let currentElementPosition = element.offsetTop - results.offsetTop;
+    let currentScrollPosition = results.scrollTop;
+
+    let currentElementBottom = currentElementPosition + element.offsetHeight;
+    let resultsBottom = currentScrollPosition + results.offsetHeight;
+
+    if(currentElementBottom > resultsBottom) {
+      // Current element is cut off at bottom
+      results.scrollTop = currentScrollPosition + currentElementBottom - resultsBottom
+    } else if(currentElementPosition < currentScrollPosition) {
+      // Current element is cut off at top
+      results.scrollTop = currentElementPosition;
+    }
   }
 
   onKeydown(event) {
